@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pull the Goalie Sooner</title>
+  <meta name="description" content="When should an NHL coach pull the goalie? A dynamic-programming model and audit of 4,000+ NHL games." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥅</text></svg>" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.9.2/build/stlite.css" />
+  <style>
+    #loading { font-family: system-ui, sans-serif; max-width: 640px; margin: 18vh auto; padding: 0 16px; color: #333; }
+    #loading h1 { font-size: 28px; margin: 0 0 8px; }
+    #loading p { line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <h1>🥅 Pull the Goalie Sooner</h1>
+    <p>Loading the model in your browser. The first visit downloads Python (via WebAssembly) and takes about 20 to 40 seconds; after that it's cached.</p>
+    <p>Source code: <a href="https://github.com/waazy-w/pull-the-goalie">github.com/waazy-w/pull-the-goalie</a></p>
+  </div>
+  <div id="root"></div>
+  <script type="module">
+    import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@1.9.2/build/stlite.js";
+    const files = await (await fetch("./files.json")).json();
+    const filesSpec = Object.fromEntries(files.map((f) => [f, { url: "./" + f }]));
+    mount(
+      {
+        requirements: ["plotly"],
+        entrypoint: "app.py",
+        files: filesSpec,
+        streamlitConfig: { "theme.primaryColor": "#2a78d6", "client.toolbarMode": "viewer" },
+      },
+      document.getElementById("root"),
+    );
+    // Hide the loading note once Streamlit has drawn something.
+    const obs = new MutationObserver(() => {
+      if (document.querySelector("#root [data-testid='stApp']")) {
+        document.getElementById("loading").remove();
+        obs.disconnect();
+      }
+    });
+    obs.observe(document.getElementById("root"), { childList: true, subtree: true });
+  </script>
+</body>
+</html>
