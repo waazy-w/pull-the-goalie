@@ -12,7 +12,7 @@ Outputs (data/processed/):
     league_trend.csv     actual vs optimal pull time by season
     calibration.csv      out-of-sample predicted vs actual comeback rates
     team_strength.csv    shrunk 5v5 offense/defense factors + team-specific T*
-    replay.parquet       third-period intervals for games in the audit
+    replay.csv.gz        third-period intervals for games in the audit
     games.csv            game results
 """
 
@@ -153,7 +153,7 @@ def main() -> None:
 
     # ---- replay data (third period only, audited games) -------------------------
     keep = iv["game_id"].isin(a["game_id"].unique()) & (iv["period"] == 3)
-    iv.loc[keep].drop(columns=["home_delayed", "away_delayed"]).to_parquet(OUT / "replay.parquet", index=False)
+    iv.loc[keep].drop(columns=["home_delayed", "away_delayed"]).to_csv(OUT / "replay.csv.gz", index=False)
     games.to_csv(OUT / "games.csv", index=False)
     # Headline curves (down 1 from 7:00, down 2 from 12:00) so the app opens instantly.
     curves = pd.concat([

@@ -36,7 +36,7 @@ def load():
         name: pd.read_csv(DATA / f"{name}.csv")
         for name in ("audit", "leaderboard", "league_trend", "calibration", "team_strength", "bootstrap", "games", "rates", "curves")
     }
-    tables["replay"] = pd.read_parquet(DATA / "replay.parquet")
+    tables["replay"] = pd.read_csv(DATA / "replay.csv.gz")
     return summary, tables
 
 
@@ -210,7 +210,7 @@ with tab_calc:
 
     # expected points if we wait until T (pull at T), from now, even strength only
     if mp_choice == "Even strength" and t_left > 0:
-        cur = live_curve(deficit, t_left, round(off, 2), round(dfn, 2), max(5, t_left // 60))
+        cur = live_curve(deficit, t_left, round(off, 2), round(dfn, 2), max(10, t_left // 30))
         fig = go.Figure()
         fig.add_scatter(x=cur["pull_at"], y=cur["comeback"] * 100, mode="lines", line=dict(color=OPTIMAL, width=2),
                         name="Chance to tie or win", customdata=[mmss(x) for x in cur["pull_at"]],
@@ -274,7 +274,7 @@ with tab_replay:
     r_team = a2.selectbox("Team", teams, index=teams.index("NYR") if "NYR" in teams else 0)
     eps = au[(au["season"] == r_season) & (au["team"] == r_team)].sort_values("points_lost", ascending=False)
     labels = [
-        f"{r.date} vs {r.opp}: down {r.deficit}, pulled {mmss(r.actual_time) if r.status != 'never pulled' else 'never'} (optimal {mmss(r.decision_time)}), -{r.points_lost:.3f} pts"
+        f"{r.date} vs {r.opp}: down {r.deficit} from {mmss(r.stint_start)}, pulled {mmss(r.actual_time) if r.status != 'never pulled' else 'never'} (optimal {mmss(r.decision_time)}), -{r.points_lost:.3f} pts"
         + (" [imputed]" if r.status.startswith("censored") else "")
         for r in eps.itertuples()
     ]

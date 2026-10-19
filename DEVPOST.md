@@ -2,6 +2,9 @@
 
 **Tagline:** NHL coaches empty the net about 1:40 too late when down one goal, and five minutes too late when down two. We built the model that shows the exact moment to pull, and audited every decision in 4,000 games.
 
+**Live app:** https://waazy-w.github.io/pull-the-goalie/ (runs in the browser, first load about 30 s)  
+**Code:** https://github.com/waazy-w/pull-the-goalie
+
 ---
 
 ## Inspiration

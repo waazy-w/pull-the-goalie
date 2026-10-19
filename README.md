@@ -4,6 +4,8 @@
 
 An open-source decision model and Streamlit app, built on every regular-season play from **4,072 NHL games**: 2023-24, 2024-25 and 2025-26, plus the 2026-27 games to date. Submission for the **AQX Sports Analytics Data Bowl 4.0**.
 
+**▶ Live app: [https://waazy-w.github.io/pull-the-goalie/](https://waazy-w.github.io/pull-the-goalie/)**. It runs entirely in your browser via [stlite](https://github.com/whitphx/stlite); the first load takes about 20 to 40 seconds.
+
 | | Model: optimal pull (95% CI) | What NHL teams actually do (median) |
 |---|---|---|
 | **Down 1**, even strength | **3:35** left (3:01 to 4:13) | 1:57 |
@@ -65,5 +67,7 @@ src/pullgoalie/audit.py     decision stints, pull times, points lost, leaderboar
 tests/                      unit tests
 DEVPOST.md                  submission write-up
 ```
+
+The live site is built by `scripts/build_site.py` and published to the `gh-pages` branch by `scripts/deploy_site.sh` (run it after rebuilding the data).
 
 Data © NHL, accessed through the public statsapi endpoints for non-commercial research. Code under the MIT License.
